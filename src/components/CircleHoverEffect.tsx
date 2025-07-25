@@ -55,7 +55,7 @@ export default function CircleHoverEffect({ children, className = '' }: CircleHo
       {/* 円形背景 - 画面全体に固定 */}
       <div
         ref={circleRef}
-        className="fixed bg-black rounded-full opacity-0 transition-all duration-500 ease-out pointer-events-none z-10"
+        className="fixed bg-black rounded-full opacity-0 transition-all duration-500 ease-out pointer-events-none z-30"
         style={{
           width: '0px',
           height: '0px',
@@ -66,7 +66,7 @@ export default function CircleHoverEffect({ children, className = '' }: CircleHo
       {/* コンテンツ */}
       <div 
         ref={containerRef}
-        className={`relative cursor-pointer ${className}`}
+        className={`relative cursor-pointer z-40 ${className}`}
       >
         {children}
       </div>

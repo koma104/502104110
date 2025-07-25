@@ -1,5 +1,6 @@
 import StarBackground from '@/components/StarBackground';
 import CircleHoverEffect from '@/components/CircleHoverEffect';
+import TextHoverEffect from '@/components/TextHoverEffect';
 
 export default function Home() {
   return (
@@ -19,14 +20,18 @@ export default function Home() {
       {/* Main Content - Centered */}
       <main className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <CircleHoverEffect className="inline-block">
+          {/* <CircleHoverEffect className="inline-block"> */}
             <h2 
-              className="text-9xl font-extrabold tracking-wide opacity-20"
+              className="text-9xl font-extrabold tracking-wide opacity-20 flex"
               style={{ fontFamily: 'var(--font-inter)' }}
             >
-              {'{502}'}
+              <span>{'{'}</span>
+              <TextHoverEffect hoverText="5" className="inline-block">5</TextHoverEffect>
+              <TextHoverEffect hoverText="0" className="inline-block">0</TextHoverEffect>
+              <TextHoverEffect hoverText="2" className="inline-block">2</TextHoverEffect>
+              <span>{'}'}</span>
             </h2>
-          </CircleHoverEffect>
+          {/* </CircleHoverEffect> */}
         </div>
       </main>
     </div>
