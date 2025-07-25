@@ -1,4 +1,5 @@
 import StarBackground from '@/components/StarBackground';
+import CircleHoverEffect from '@/components/CircleHoverEffect';
 
 export default function Home() {
   return (
@@ -14,6 +15,20 @@ export default function Home() {
           </h1>
         </div>
       </header>
+
+      {/* Main Content - Centered */}
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <CircleHoverEffect className="inline-block">
+            <h2 
+              className="text-9xl font-extrabold tracking-wide opacity-20"
+              style={{ fontFamily: 'var(--font-inter)' }}
+            >
+              {'{502}'}
+            </h2>
+          </CircleHoverEffect>
+        </div>
+      </main>
     </div>
   );
 }
