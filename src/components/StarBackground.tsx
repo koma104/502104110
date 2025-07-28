@@ -23,7 +23,7 @@ interface StarBackgroundProps {
 }
 
 export default function StarBackground({ 
-  characters = ['5', '0', '2', '1', '0', '4', '1', '1', '0'],
+  characters = ['P', 'E', 'O', 'P', 'L', 'E'],
   fontSize = 16,
   fontFamily = 'Arial, sans-serif',
   color = '#1f1f1d'
