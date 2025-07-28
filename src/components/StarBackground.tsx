@@ -5,14 +5,13 @@ import { useEffect, useRef } from 'react';
 interface Star {
   x: number;
   y: number;
-  size: number;
-  opacity: number;
   speed: number;
   targetX: number;
   targetY: number;
   originalX: number;
   originalY: number;
   character: string; // 文字を追加
+  fontSize: number; // 個別のフォントサイズを追加
 }
 
 interface StarBackgroundProps {
@@ -59,14 +58,13 @@ export default function StarBackground({
       stars.push({
         x,
         y,
-        size: Math.random() * 2 + 0.5,
-        opacity: Math.random() * 0.8 + 0.2,
         speed: Math.random() * 0.5 + 0.1,
         targetX: x,
         targetY: y,
         originalX: x,
         originalY: y,
         character: characters[Math.floor(Math.random() * characters.length)], // ランダムな文字を選択
+        fontSize: Math.random() * (fontSize * 0.8) + (fontSize * 0.4), // フォントサイズの40%〜120%の範囲でランダム
       });
     }
 
@@ -107,13 +105,14 @@ export default function StarBackground({
       // Canvasをクリア
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // フォントを設定
-      ctx.font = `${fontSize}px ${fontFamily}`;
+      // テキストの基本設定
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
       // 星を更新・描画
       stars.forEach((star) => {
+        // 各文字の個別フォントサイズを設定
+        ctx.font = `${star.fontSize}px ${fontFamily}`;
         if (isMouseActive.current) {
           // マウスがアクティブな場合：マウスに集まる
           const dx = mouseRef.current.x - star.x;
@@ -137,8 +136,8 @@ export default function StarBackground({
         star.x += (star.targetX - star.x) * 0.05;
         star.y += (star.targetY - star.y) * 0.05;
 
-        // 文字を描画
-        ctx.fillStyle = `${color}${Math.floor(star.opacity * 255).toString(16).padStart(2, '0')}`;
+        // 文字を描画（固定の不透明度）
+        ctx.fillStyle = color;
         ctx.fillText(star.character, star.x, star.y);
       });
 
