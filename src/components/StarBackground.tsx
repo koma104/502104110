@@ -12,6 +12,9 @@ interface Star {
   originalY: number;
   character: string; // 文字を追加
   fontSize: number; // 個別のフォントサイズを追加
+  directionX: number; // 移動方向X
+  directionY: number; // 移動方向Y
+  isDiagonal: boolean; // 対角移動フラグ
 }
 
 interface StarBackgroundProps {
@@ -65,6 +68,27 @@ export default function StarBackground({
         originalY: y,
         character: characters[Math.floor(Math.random() * characters.length)], // ランダムな文字を選択
         fontSize: Math.random() * (fontSize * 0.8) + (fontSize * 0.4), // フォントサイズの40%〜120%の範囲でランダム
+        isDiagonal: Math.random() < 0.5, // 50%の確率で対角移動
+        directionX: (() => {
+          if (Math.random() < 0.5) {
+            // 横断移動の場合
+            const crossDirection = Math.random() < 0.5 ? 1 : -1;
+            return (Math.random() * 0.8 + 0.5) * crossDirection;
+          } else {
+            // ゆらゆら動きの場合
+            return (Math.random() - 0.5) * 0.3;
+          }
+        })(),
+        directionY: (() => {
+          if (Math.random() < 0.5) {
+            // 横断移動の場合
+            const crossDirection = Math.random() < 0.5 ? 1 : -1;
+            return (Math.random() * 0.8 + 0.5) * crossDirection;
+          } else {
+            // ゆらゆら動きの場合
+            return (Math.random() - 0.5) * 0.3;
+          }
+        })(),
       });
     }
 
@@ -132,9 +156,72 @@ export default function StarBackground({
           star.targetY = star.originalY;
         }
 
-        // 星を目標位置に向かって移動
-        star.x += (star.targetX - star.x) * 0.05;
-        star.y += (star.targetY - star.y) * 0.05;
+        // マウス追従効果（すべての文字に適用）
+        if (isMouseActive.current) {
+          // マウスがアクティブな場合：マウスに集まる
+          const dx = mouseRef.current.x - star.x;
+          const dy = mouseRef.current.y - star.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 100) { // マウスから100px以内
+            star.targetX = mouseRef.current.x + (Math.random() - 0.5) * 50;
+            star.targetY = mouseRef.current.y + (Math.random() - 0.5) * 50;
+          } else {
+            star.targetX = star.originalX;
+            star.targetY = star.originalY;
+          }
+        } else {
+          // マウスが非アクティブな場合：元の位置に戻る
+          star.targetX = star.originalX;
+          star.targetY = star.originalY;
+        }
+
+        // 画面の端から端への移動
+        if (star.isDiagonal) {
+          // 横断移動の場合（マウス追従効果付き）
+          if (isMouseActive.current) {
+            // マウスがアクティブな場合：マウスに集まる
+            const dx = mouseRef.current.x - star.x;
+            const dy = mouseRef.current.y - star.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 100) { // マウスから100px以内
+              star.x += (mouseRef.current.x - star.x) * 0.1;
+              star.y += (mouseRef.current.y - star.y) * 0.1;
+            } else {
+              // 通常の横断移動
+              star.x += star.directionX;
+              star.y += star.directionY;
+            }
+          } else {
+            // 通常の横断移動
+            star.x += star.directionX;
+            star.y += star.directionY;
+          }
+          
+          // 画面外に出た場合、ランダムな場所から再出現
+          if (star.x < -50 || star.x > canvas.width + 50 || 
+              star.y < -50 || star.y > canvas.height + 50) {
+            
+            // ランダムな場所から出現
+            star.x = Math.random() * canvas.width;
+            star.y = Math.random() * canvas.height;
+            
+            // 横断方向の移動を設定
+            const crossDirection = Math.random() < 0.5 ? 1 : -1;
+            star.directionX = (Math.random() * 0.8 + 0.5) * crossDirection;
+            star.directionY = (Math.random() * 0.8 + 0.5) * crossDirection;
+          }
+        } else {
+          // ゆらゆら動きの場合
+          const time = Date.now() * 0.0003; // 非常にゆっくりとした動き
+          const walkX = Math.sin(time + star.x * 0.01) * 0.5; // 左右のゆっくりとした揺れ
+          const walkY = Math.cos(time * 0.7 + star.y * 0.01) * 0.3; // 上下のゆっくりとした揺れ
+          
+          // 星を目標位置に向かって移動（歩行動きを追加）
+          star.x += (star.targetX - star.x) * 0.05 + walkX;
+          star.y += (star.targetY - star.y) * 0.05 + walkY;
+        }
 
         // 文字を描画（固定の不透明度）
         ctx.fillStyle = color;
