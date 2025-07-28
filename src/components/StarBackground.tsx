@@ -15,6 +15,10 @@ interface Star {
   directionX: number; // 移動方向X
   directionY: number; // 移動方向Y
   isDiagonal: boolean; // 対角移動フラグ
+  explosionX: number; // 爆発時の速度X
+  explosionY: number; // 爆発時の速度Y
+  isExploding: boolean; // 爆発中フラグ
+  explosionTimer: number; // 爆発タイマー
 }
 
 interface StarBackgroundProps {
@@ -89,6 +93,10 @@ export default function StarBackground({
             return (Math.random() - 0.5) * 0.3;
           }
         })(),
+        explosionX: 0,
+        explosionY: 0,
+        isExploding: false,
+        explosionTimer: 0,
       });
     }
 
@@ -100,7 +108,44 @@ export default function StarBackground({
       isMouseActive.current = true;
     };
 
+    const handleMouseDown = (e: MouseEvent) => {
+      console.log('マウスダウンイベントが発火しました！');
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current.x = e.clientX - rect.left;
+      mouseRef.current.y = e.clientY - rect.top;
+      isMouseActive.current = true;
+    };
+
     const handleMouseLeave = () => {
+      isMouseActive.current = false;
+    };
+
+    const handleMouseUp = () => {
+      console.log('マウスアップイベントが発火しました！');
+      
+      // マウスリリース時に爆発効果を発動
+      const mouseX = mouseRef.current.x;
+      const mouseY = mouseRef.current.y;
+      
+      console.log(`マウス位置: (${mouseX}, ${mouseY})`);
+      
+      let explosionCount = 0;
+      stars.forEach((star) => {
+        const distance = Math.sqrt((mouseX - star.x) ** 2 + (mouseY - star.y) ** 2);
+        if (distance < 300) { // マウスから300px以内の要素を爆発（さらに範囲拡大）
+          star.isExploding = true;
+          star.explosionTimer = 80; // 80フレーム間爆発（短縮して瞬間的な爆発に）
+          
+          // 爆発方向をランダムに設定（超激しい爆発）
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 80 + 60; // 60〜140の速度（さらに大幅増加）
+          star.explosionX = Math.cos(angle) * speed;
+          star.explosionY = Math.sin(angle) * speed;
+          explosionCount++;
+        }
+      });
+      
+      console.log(`爆発した要素数: ${explosionCount}`);
       isMouseActive.current = false;
     };
 
@@ -119,8 +164,10 @@ export default function StarBackground({
     };
 
     // イベントリスナーを追加
+    canvas.addEventListener('mousedown', handleMouseDown);
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseleave', handleMouseLeave);
+    canvas.addEventListener('mouseup', handleMouseUp);
     canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
     canvas.addEventListener('touchend', handleTouchEnd);
 
@@ -176,51 +223,72 @@ export default function StarBackground({
           star.targetY = star.originalY;
         }
 
-        // 画面の端から端への移動
-        if (star.isDiagonal) {
-          // 横断移動の場合（マウス追従効果付き）
-          if (isMouseActive.current) {
-            // マウスがアクティブな場合：マウスに集まる
-            const dx = mouseRef.current.x - star.x;
-            const dy = mouseRef.current.y - star.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance < 100) { // マウスから100px以内
-              star.x += (mouseRef.current.x - star.x) * 0.1;
-              star.y += (mouseRef.current.y - star.y) * 0.1;
+        // 爆発中の処理
+        if (star.isExploding) {
+          star.explosionTimer--;
+          
+          // 爆発速度を徐々に減衰（ほぼ減衰なし）
+          star.explosionX *= 0.999;
+          star.explosionY *= 0.999;
+          
+          // 爆発移動
+          star.x += star.explosionX;
+          star.y += star.explosionY;
+          
+          // 爆発タイマーが終了したら通常状態に戻る
+          if (star.explosionTimer <= 0) {
+            star.isExploding = false;
+            star.explosionX = 0;
+            star.explosionY = 0;
+          }
+        } else {
+          // 通常の移動処理
+          // 画面の端から端への移動
+          if (star.isDiagonal) {
+            // 横断移動の場合（マウス追従効果付き）
+            if (isMouseActive.current) {
+              // マウスがアクティブな場合：マウスに集まる
+              const dx = mouseRef.current.x - star.x;
+              const dy = mouseRef.current.y - star.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              
+              if (distance < 100) { // マウスから100px以内
+                star.x += (mouseRef.current.x - star.x) * 0.1;
+                star.y += (mouseRef.current.y - star.y) * 0.1;
+              } else {
+                // 通常の横断移動
+                star.x += star.directionX;
+                star.y += star.directionY;
+              }
             } else {
               // 通常の横断移動
               star.x += star.directionX;
               star.y += star.directionY;
             }
+            
+            // 画面外に出た場合、ランダムな場所から再出現
+            if (star.x < -50 || star.x > canvas.width + 50 || 
+                star.y < -50 || star.y > canvas.height + 50) {
+              
+              // ランダムな場所から出現
+              star.x = Math.random() * canvas.width;
+              star.y = Math.random() * canvas.height;
+              
+              // 横断方向の移動を設定
+              const crossDirection = Math.random() < 0.5 ? 1 : -1;
+              star.directionX = (Math.random() * 0.8 + 0.5) * crossDirection;
+              star.directionY = (Math.random() * 0.8 + 0.5) * crossDirection;
+            }
           } else {
-            // 通常の横断移動
-            star.x += star.directionX;
-            star.y += star.directionY;
-          }
-          
-          // 画面外に出た場合、ランダムな場所から再出現
-          if (star.x < -50 || star.x > canvas.width + 50 || 
-              star.y < -50 || star.y > canvas.height + 50) {
+            // ゆらゆら動きの場合
+            const time = Date.now() * 0.0003; // 非常にゆっくりとした動き
+            const walkX = Math.sin(time + star.x * 0.01) * 0.5; // 左右のゆっくりとした揺れ
+            const walkY = Math.cos(time * 0.7 + star.y * 0.01) * 0.3; // 上下のゆっくりとした揺れ
             
-            // ランダムな場所から出現
-            star.x = Math.random() * canvas.width;
-            star.y = Math.random() * canvas.height;
-            
-            // 横断方向の移動を設定
-            const crossDirection = Math.random() < 0.5 ? 1 : -1;
-            star.directionX = (Math.random() * 0.8 + 0.5) * crossDirection;
-            star.directionY = (Math.random() * 0.8 + 0.5) * crossDirection;
+            // 星を目標位置に向かって移動（歩行動きを追加）
+            star.x += (star.targetX - star.x) * 0.05 + walkX;
+            star.y += (star.targetY - star.y) * 0.05 + walkY;
           }
-        } else {
-          // ゆらゆら動きの場合
-          const time = Date.now() * 0.0003; // 非常にゆっくりとした動き
-          const walkX = Math.sin(time + star.x * 0.01) * 0.5; // 左右のゆっくりとした揺れ
-          const walkY = Math.cos(time * 0.7 + star.y * 0.01) * 0.3; // 上下のゆっくりとした揺れ
-          
-          // 星を目標位置に向かって移動（歩行動きを追加）
-          star.x += (star.targetX - star.x) * 0.05 + walkX;
-          star.y += (star.targetY - star.y) * 0.05 + walkY;
         }
 
         // 文字を描画（固定の不透明度）
@@ -236,8 +304,10 @@ export default function StarBackground({
     // クリーンアップ
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      canvas.removeEventListener('mousedown', handleMouseDown);
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
+      canvas.removeEventListener('mouseup', handleMouseUp);
       canvas.removeEventListener('touchmove', handleTouchMove);
       canvas.removeEventListener('touchend', handleTouchEnd);
     };
