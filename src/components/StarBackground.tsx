@@ -12,9 +12,22 @@ interface Star {
   targetY: number;
   originalX: number;
   originalY: number;
+  character: string; // 文字を追加
 }
 
-export default function StarBackground() {
+interface StarBackgroundProps {
+  characters?: string[]; // 使用する文字の配列
+  fontSize?: number; // フォントサイズ
+  fontFamily?: string; // フォントファミリー
+  color?: string; // 文字色
+}
+
+export default function StarBackground({ 
+  characters = ['5', '0', '2', '1', '0', '4', '1', '1', '0'],
+  fontSize = 16,
+  fontFamily = 'Arial, sans-serif',
+  color = '#1f1f1d'
+}: StarBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const isMouseActive = useRef(false);
@@ -53,6 +66,7 @@ export default function StarBackground() {
         targetY: y,
         originalX: x,
         originalY: y,
+        character: characters[Math.floor(Math.random() * characters.length)], // ランダムな文字を選択
       });
     }
 
@@ -93,6 +107,11 @@ export default function StarBackground() {
       // Canvasをクリア
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // フォントを設定
+      ctx.font = `${fontSize}px ${fontFamily}`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
       // 星を更新・描画
       stars.forEach((star) => {
         if (isMouseActive.current) {
@@ -118,11 +137,9 @@ export default function StarBackground() {
         star.x += (star.targetX - star.x) * 0.05;
         star.y += (star.targetY - star.y) * 0.05;
 
-        // 星を描画
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(31, 31, 29, ${star.opacity})`;
-        ctx.fill();
+        // 文字を描画
+        ctx.fillStyle = `${color}${Math.floor(star.opacity * 255).toString(16).padStart(2, '0')}`;
+        ctx.fillText(star.character, star.x, star.y);
       });
 
       requestAnimationFrame(animate);
@@ -138,7 +155,7 @@ export default function StarBackground() {
       canvas.removeEventListener('touchmove', handleTouchMove);
       canvas.removeEventListener('touchend', handleTouchEnd);
     };
-  }, []);
+  }, [characters, fontSize, fontFamily, color]);
 
   return (
     <canvas

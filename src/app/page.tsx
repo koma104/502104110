@@ -1,11 +1,10 @@
 import StarBackground from '@/components/StarBackground';
-import CircleHoverEffect from '@/components/CircleHoverEffect';
 import TextHoverEffect from '@/components/TextHoverEffect';
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-custom-bg text-custom-text">
-      {/* Star Background */}
+      {/* Star Background - デフォルトの学籍番号の数字を使用 */}
       <StarBackground />
       
       {/* Header */}

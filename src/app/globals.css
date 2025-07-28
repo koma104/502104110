@@ -33,10 +33,7 @@ body {
   overflow-x: hidden;
 }
 
-/* スムーズスクロール用 */
-html {
-  scroll-behavior: smooth;
-}
+
 
 /* カスタムスクロールバー */
 ::-webkit-scrollbar {
