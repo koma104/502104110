@@ -14,7 +14,7 @@ export function LenisProvider({ children }: LenisProviderProps) {
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
         touchMultiplier: 2,
-        anchors: true,
+        anchors: false, // ヘッダーでオフセット付きスクロールを制御するため無効化
       }}
     >
       {children}
