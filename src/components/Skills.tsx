@@ -1,6 +1,6 @@
 export function Skills() {
-  const frontend = ["React", "Next.js", "Vue.js", "Tailwind CSS"];
-  const tools = ["TypeScript", "GraphQL", "Node.js", "Figma", "tRPC"];
+  const frontend = ["React", "Next.js", "Tailwind CSS"];
+  const tools = ["HTML", "CSS", "JavaScript", "Sass", "Pug", "TypeScript", "Node.js", "GSAP", "Lottie", "p5.js", "Figma", "Photoshop", "Illustrator", "Affinity", "Google Maps APIs"];
 
   return (
     <section id="skills" className="scroll-mt-[80px] mb-16 space-y-6 md:mb-24">
