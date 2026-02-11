@@ -75,7 +75,7 @@ export function Projects() {
         <h2 className="text-2xl font-bold">Projects</h2>
         <div className="h-px flex-1 bg-slate-200" />
       </div>
-      <div className="space-y-24 md:space-y-40">
+      <div className="space-y-16 md:space-y-40">
         {projects.map((project) => (
           <div
             key={project.title}
