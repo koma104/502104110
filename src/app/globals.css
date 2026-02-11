@@ -33,3 +33,29 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
+
+/* ヘッダーロゴ: テキストは font-size:0 で非表示、アイコンは ::before で表示（FOUT防止） */
+.logo-icon-wrap {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  position: relative;
+}
+.logo-icon-wrap .material-symbols-outlined {
+  font-size: 0 !important;
+  position: absolute;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.logo-icon-wrap::before {
+  content: "terminal";
+  font-family: "Material Symbols Outlined";
+  font-size: 2rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #2563eb;
+}
