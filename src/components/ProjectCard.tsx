@@ -39,7 +39,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       className="flex flex-col gap-0 md:flex-row md:gap-10 md:items-stretch"
     >
       <div className="relative flex w-full shrink-0 items-center overflow-hidden rounded-lg bg-bg-offwhite md:w-[65%]">
-        <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-text-black md:aspect-[4/3]">
+        <div className="relative aspect-video w-full overflow-hidden rounded-lg md:aspect-[4/3]">
           <div
             className="absolute left-0 top-1/2 h-[120%] w-full -translate-y-1/2 will-change-transform"
             style={{ transform: `translate3d(0, calc(-50% + ${parallaxY}px), 0)` }}
