@@ -55,14 +55,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </div>
       </div>
       <div className="flex w-full flex-col justify-between gap-5 px-2.5 py-5 md:w-[35%] md:min-w-0 md:border-l md:border-gray-300 md:px-5 md:py-0">
-        <div className="flex flex-col justify-between gap-5">
+        <div className="flex flex-col justify-between">
           <div className="space-y-4">
             <div>
-              {project.date && (
-                <p className="mb-1.5 text-[11px] text-gray-500 tracking-wide">
-                  {project.date}
-                </p>
-              )}
               <span className="mb-2 inline-block rounded-full border border-gray-300 px-3 py-1 text-xs font-bold uppercase tracking-wider text-gray-600">
                 {project.subtitle}
               </span>
@@ -101,6 +96,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
                   </span>
                 ))}
               </div>
+              {project.date && (
+                <p className="mt-3 text-right text-[11px] text-gray-500 tracking-wide">
+                  Date {project.date}
+                </p>
+              )}
             </div>
           </div>
           <div className="mt-auto flex flex-col gap-3 pt-4">
