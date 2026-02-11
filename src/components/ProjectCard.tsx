@@ -43,16 +43,37 @@ export function ProjectCard({ project }: ProjectCardProps) {
       data-visible={isVisible || undefined}
     >
       <div className="relative flex w-full shrink-0 items-center overflow-hidden rounded-lg bg-bg-offwhite md:w-[65%]">
-        <div className="relative aspect-video w-full overflow-hidden rounded-lg md:aspect-[4/3]">
-          <Image
-            src={project.image}
-            alt={project.title}
-            fill
-            className="object-cover object-center"
-            sizes="(max-width: 768px) 100vw, 65vw"
-            unoptimized
-          />
-        </div>
+        {project.demoUrl ? (
+          <a
+            href={project.demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full"
+            aria-label={`${project.title}のサイトを開く`}
+          >
+            <div className="relative aspect-video w-full overflow-hidden rounded-lg md:aspect-[4/3]">
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 768px) 100vw, 65vw"
+                unoptimized
+              />
+            </div>
+          </a>
+        ) : (
+          <div className="relative aspect-video w-full overflow-hidden rounded-lg md:aspect-[4/3]">
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 100vw, 65vw"
+              unoptimized
+            />
+          </div>
+        )}
       </div>
       <div className="flex w-full flex-col justify-between gap-5 px-2.5 py-5 md:w-[35%] md:min-w-0 md:border-l md:border-gray-300 md:px-5 md:py-0">
         <div className="flex flex-col justify-between">
