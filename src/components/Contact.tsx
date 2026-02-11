@@ -2,13 +2,15 @@
 
 import { useState } from 'react';
 
-const EMAIL = 'hello@johndoe.com';
+// スパム対策: アドレスを分割し、表示・mailto 時に結合（HTML ソースに完全な文字列が載りにくくする）
+const EMAIL_PARTS = ['miracle.komatsu', '+work', '@', 'gmail.com'] as const;
+const getEmail = () => EMAIL_PARTS.join('');
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
 
   const copyEmail = () => {
-    navigator.clipboard.writeText(EMAIL).then(() => {
+    navigator.clipboard.writeText(getEmail()).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
@@ -26,7 +28,7 @@ export function Contact() {
           </p>
           <div className="flex flex-col gap-4 sm:flex-row">
             <a
-              href={`mailto:${EMAIL}`}
+              href={`mailto:${getEmail()}`}
               className="rounded-md bg-text-black px-8 py-4 text-center text-sm font-bold uppercase tracking-wide text-white transition-colors hover:bg-accent-blue"
             >
               Email Me
