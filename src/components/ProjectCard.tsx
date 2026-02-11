@@ -9,11 +9,12 @@ export type Project = {
   date?: string;
   subtitle: string;
   description: string;
+  role?: string;
   image: string;
   demoUrl?: string;
   githubUrl?: string;
-  highlights: string[];
-  notes: string;
+  skills: string[];
+  focus: string;
   tags: string[];
 };
 
@@ -55,7 +56,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-col justify-between gap-5 p-5 md:w-[35%] md:min-w-0 md:border-l md:border-gray-300 md:py-6">
+      <div className="flex w-full flex-col justify-between gap-5 px-5 py-0 md:w-[35%] md:min-w-0 md:border-l md:border-gray-300 md:py-0">
         <div className="flex flex-col justify-between gap-5">
           <div className="space-y-4">
             <div>
@@ -77,26 +78,31 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <div className="space-y-3">
               <div>
                 <p className="mb-1 text-[10px] font-bold uppercase text-slate-500">
-                  Scope
+                  Role
                 </p>
-                <p className="text-xs leading-relaxed text-slate-600">{project.description}</p>
+                <p className="text-xs leading-relaxed text-slate-600">{project.role ?? project.description}</p>
               </div>
               <div>
                 <p className="mb-1 text-[10px] font-bold uppercase text-slate-500">
-                  Key efforts
+                  Focus
                 </p>
-                <p className="text-xs leading-relaxed text-slate-600">{project.notes}</p>
+                <p className="text-xs leading-relaxed text-slate-600">{project.focus}</p>
               </div>
             </div>
             <div>
               <p className="mb-2 text-[10px] font-bold uppercase text-slate-500">
-                Implementation
+                Skills
               </p>
-              <ul className="space-y-1 text-xs text-slate-600 list-disc list-inside">
-                {project.highlights.map((item) => (
-                  <li key={item}>{item}</li>
+              <div className="flex flex-wrap gap-2">
+                {project.skills.map((item) => (
+                  <span
+                    key={item}
+                    className="inline-block rounded-full border border-gray-300 px-2.5 py-0.5 text-[10px] font-medium tracking-wider text-slate-500"
+                  >
+                    {item}
+                  </span>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
           <div className="mt-auto flex flex-col gap-3 pt-4">
