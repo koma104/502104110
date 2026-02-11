@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
-import { useLenis } from "lenis/react";
+import { useEffect, useRef, useState } from "react";
 
 export type Project = {
   title: string;
@@ -18,45 +17,44 @@ export type Project = {
   tags: string[];
 };
 
-const PARALLAX_RATE_IMAGE = 0.1;
-
 type ProjectCardProps = { project: Project };
 
 export function ProjectCard({ project }: ProjectCardProps) {
   const cardRef = useRef<HTMLElement | null>(null);
-  const [parallaxY, setParallaxY] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
 
-  useLenis(() => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    const top = rect.top;
-    setParallaxY(-top * PARALLAX_RATE_IMAGE);
-  });
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
+      { rootMargin: "0px 0px -40px 0px", threshold: 0 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
     <article
       ref={cardRef}
-      className="flex flex-col gap-0 md:flex-row md:gap-10 md:items-stretch"
+      className="flex flex-col gap-0 md:flex-row md:gap-10 md:items-stretch transition-all duration-700 ease-out opacity-0 translate-y-6 data-[visible]:opacity-100 data-[visible]:translate-y-0"
+      data-visible={isVisible || undefined}
     >
       <div className="relative flex w-full shrink-0 items-center overflow-hidden rounded-lg bg-bg-offwhite md:w-[65%]">
         <div className="relative aspect-video w-full overflow-hidden rounded-lg md:aspect-[4/3]">
-          <div
-            className="absolute left-0 top-1/2 h-[120%] w-full -translate-y-1/2 will-change-transform"
-            style={{ transform: `translate3d(0, calc(-50% + ${parallaxY}px), 0)` }}
-          >
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              className="object-cover object-center"
-              sizes="(max-width: 768px) 100vw, 65vw"
-              unoptimized
-            />
-          </div>
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover object-center"
+            sizes="(max-width: 768px) 100vw, 65vw"
+            unoptimized
+          />
         </div>
       </div>
-      <div className="flex w-full flex-col justify-between gap-5 px-5 py-0 md:w-[35%] md:min-w-0 md:border-l md:border-gray-300 md:py-0">
+      <div className="flex w-full flex-col justify-between gap-5 px-5 py-5 md:w-[35%] md:min-w-0 md:border-l md:border-gray-300 md:py-0">
         <div className="flex flex-col justify-between gap-5">
           <div className="space-y-4">
             <div>
