@@ -75,8 +75,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         )}
       </div>
-      <div className="flex w-full flex-col justify-between gap-5 px-2.5 py-5 md:w-[35%] md:min-w-0 md:border-l md:border-gray-300 md:px-5 md:py-0">
-        <div className="flex flex-col gap-4">
+      <div className="flex w-full flex-col justify-between px-2.5 py-5 md:w-[35%] md:min-w-0 md:border-l md:border-gray-300 md:px-5 md:py-0">
+        <div className="flex flex-col gap-5">
           <div className="flex min-h-0 flex-1 flex-col gap-4">
             <div>
               {project.date && (
