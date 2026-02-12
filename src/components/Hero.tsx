@@ -6,7 +6,7 @@ export function Hero() {
         <br />
         <span className="text-primary">Frontend <span className="font-light tracking-[-0.06em]">Engineer</span></span>
       </h1>
-      <div className="max-w-2xl">
+      <div className="max-w-[44rem]">
         <p className="text-lg font-medium leading-relaxed md:text-xl">
           React / Next.js / TypeScript / Tailwind / GSAP
           を中心に、フロントエンドの個人制作を行っています。
