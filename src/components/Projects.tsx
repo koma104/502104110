@@ -75,7 +75,7 @@ export function Projects() {
         <h2 className="text-2xl font-bold">Projects</h2>
         <div className="h-px flex-1 bg-slate-200" />
       </div>
-      <div className="flex flex-col gap-16 md:gap-40">
+      <div className="flex flex-col gap-[2.75rem] md:gap-40">
         {projects.map((project) => (
           <div
             key={project.title}
