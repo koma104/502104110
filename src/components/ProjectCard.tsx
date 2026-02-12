@@ -135,7 +135,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 rel="noopener noreferrer"
                 className="flex w-full items-center justify-center gap-1.5 rounded-md bg-text-black px-4 py-2.5 text-xs font-bold uppercase tracking-wide text-white transition-colors hover:bg-accent-blue"
               >
-                <span className="material-symbols-outlined text-sm">
+                <span className="material-symbols-outlined icon-visit-site">
                   open_in_new
                 </span>
                 Visit Site
