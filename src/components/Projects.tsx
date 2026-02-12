@@ -70,12 +70,12 @@ const projects: Project[] = [
 
 export function Projects() {
   return (
-    <section id="projects" className="scroll-mt-[80px] mb-0 space-y-6 md:mb-40">
+    <section id="projects" className="scroll-mt-[80px] mb-0 flex flex-col gap-6 md:mb-40">
       <div className="flex items-center gap-3">
         <h2 className="text-2xl font-bold">Projects</h2>
         <div className="h-px flex-1 bg-slate-200" />
       </div>
-      <div className="space-y-16 md:space-y-40">
+      <div className="flex flex-col gap-16 md:gap-40">
         {projects.map((project) => (
           <div
             key={project.title}

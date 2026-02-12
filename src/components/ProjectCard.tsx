@@ -76,8 +76,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
         )}
       </div>
       <div className="flex w-full flex-col justify-between gap-5 px-2.5 py-5 md:w-[35%] md:min-w-0 md:border-l md:border-gray-300 md:px-5 md:py-0">
-        <div className="flex flex-col justify-between">
-          <div className="space-y-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex min-h-0 flex-1 flex-col gap-4">
             <div>
               {project.date && (
                 <p className="mb-1.5 text-[11px] text-gray-500 tracking-wide">
@@ -91,7 +91,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <p className="text-sm leading-relaxed text-slate-700">
               {project.description}
             </p>
-            <div className="space-y-3">
+            <div className="flex flex-col gap-3">
               <div>
                 <p className="mb-1 text-[10px] font-bold uppercase text-slate-500">
                   Type
@@ -127,7 +127,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               </div>
             </div>
           </div>
-          <div className="mt-auto flex flex-col gap-3 pt-4">
+          <div className="flex flex-col gap-3">
             {project.demoUrl && (
               <a
                 href={project.demoUrl}
