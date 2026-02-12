@@ -17,6 +17,10 @@ export default function RootLayout({
     <html lang="ja">
       <head>
         <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+          rel="stylesheet"
+        />
+        <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block"
           rel="stylesheet"
         />

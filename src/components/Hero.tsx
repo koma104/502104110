@@ -2,9 +2,9 @@ export function Hero() {
   return (
     <header className="mb-32" id="hero">
       <h1 className="mb-8 text-5xl font-black leading-none tracking-tighter md:text-6xl">
-        Developer <span className="font-light">Portfolio —</span>
+        Developer <span className="font-light tracking-[-0.06em]">Portfolio <span className="relative top-[-3px] inline-block text-[0.75em] align-middle">—</span></span>
         <br />
-        <span className="text-primary">Frontend <span className="font-light">Engineer</span></span>
+        <span className="text-primary">Frontend <span className="font-light tracking-[-0.06em]">Engineer</span></span>
       </h1>
       <div className="max-w-2xl">
         <p className="text-lg font-medium leading-relaxed md:text-xl">
